@@ -5,12 +5,20 @@ class HomeView{
 
     }
 
-    showGuestPage(){
-         this._homeView.showGuestPage();
+    showGuestPage(mainData, sidebarData){
+         $.get('templates/welcome-guest.html',function (template) {
+             let renderedTemplate = Mustache.render(template, sidebarData);
+
+
+             $(this._wrapperSelector).html(renderedTemplate);
+             $.get('templates/posts.html', function(template)){
+
+             }
+         })
     }
 
     showUserPage(){
-        this._homeView.showUserPage();
+
 
     }
 }
