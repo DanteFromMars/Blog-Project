@@ -7,35 +7,39 @@ class HomeController{
 
     }
 
-    showGuestPage(mainData, sidebarData){
+    showGuestPage(){
         let _that = this;
-        this.requester.get(this._baseServiceUrl,
-            function(response){
-                showPopup('success','Successfully collected data.');
+
+        let recentPosts = [];
+
+        let requestUrl = this._baseServiceUrl + "/appdata/" + this._appId + "/posts";
+
+        this.requester.get(requestUrl,
+            function success(data){
 
                 let currentId = 1;
 
-                response.sort(function (elem1,elem2){
+                data.sort(function (elem1,elem2){
                     let date1 = new Date(elem1._kmd.ect);
                     let date2 = new Date(elem2._kmd.ect);
                     return date2-date1;
                 })
 
-                for(let i=0; i<5; i++){
-                    recentPosts.postId = currentId;
+                for(let i=0; i<data.length && i<5; i++){
+                    data[i].postId = currentId;
                     currentId++;
-                    recentPosts.push(response[i]);
+                    recentPosts.push(data);
                 }
 
-                _that._homeView.showGuestPage(response, recentPosts);
+                _that._homeView.showGuestPage(recentPosts,data);
             },
-            function(data){
+            function error(data){
                 showPopup('error','Error collecting the data.')
             })
 
     }
 
     showUserPage(){
-        this._homeview.showUserPage();
+        this._homeView.showUserPage();
     }
 }
