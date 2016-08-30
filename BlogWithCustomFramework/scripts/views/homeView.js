@@ -5,35 +5,33 @@ class HomeView{
 
     }
 
-    showGuestPage(mainData){
+    showGuestPage(sidebarData, mainData){
         let _that = this;
+        $.get('templates/welcome-guest.html',function (template) {
+            let renderedTemplate = Mustache.render(template, null);
 
-         $.get('templates/welcome-guest.html',function (template) {
-             let renderedTemplate = Mustache.render(template, null);
+            $(_that._wrapperSelector).html(renderedWrapper);
 
-             $(_that._wrapperSelector).html(renderedTemplate);
+            $.get('templates/posts.html', function (template) {
+                let blogPosts = {
+                    blogPosts: mainData
+                };
 
-             $.get('templates/posts.html', function(template){
-                 let blogPosts = {
-                     blogPosts : mainData
-                 });
+                let renderedPosts = Mustache.render(template, blogPosts);
+                $('.articles').html(renderedPosts);
+            }),
+                $.get('templates/recent-posts.html', function (template) {
+                    let recentPosts = {
+                        blogPosts: sidebarData
+                    };
 
-                 let renderedPosts = Mustache.render(template, blogPosts);
-                 $('.articles').html(renderedPosts);
+                    console.log(recentPosts);
 
-                 $.get('templates/recent-posts.html', function(template){
-                     let recentPosts = {
-                         blogPosts: sidebarData
-                     };
+                    let renderedRecentPosts = Mustache.render(template, recentPosts);
+                    $('.recent-posts').html(renderedRecentPosts);
+                });
 
-                     console.log(recentPosts);
-
-                     let renderedPosts = Mustache.render(template, blogPosts);
-                     $('.recent-posts').html(renderedRecentPosts);
-                 })
-
-             }
-         })
+        });
     }
 
     showUserPage(){
